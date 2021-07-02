@@ -1,0 +1,30 @@
+import numpy as np
+import scipy.special as spl
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+n = 3
+
+k = list(spl.jnp_zeros(n, 5))
+
+r = np.linspace(0,1,500)
+theta = np.linspace(0,2*np.pi,500)
+R, Theta = np.meshgrid(r, theta)
+
+V = []
+for i in range(1,len(k)):
+    V.append(spl.jv(n,k[i]*R)*np.cos(n*Theta))
+
+fig, ax = plt.subplots(nrows=2, ncols=2, subplot_kw={'projection': 'polar'})
+
+im = ax[0,0].pcolormesh(Theta, R, V[0], shading='auto')
+ax[0,1].pcolormesh(Theta, R, V[1], shading='auto')
+ax[1,0].pcolormesh(Theta, R, V[2], shading='auto')
+ax[1,1].pcolormesh(Theta, R, V[3], shading='auto')
+
+fig.tight_layout()
+cbar_ax = fig.add_axes([0.9, 0.15, 0.03, 0.7])
+plt.colorbar(im, cax=cbar_ax)
+# or can use [fig.colorbar(ax=ax, mappable=im, orientation='vertical')]
+
+plt.show()
