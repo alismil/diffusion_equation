@@ -1,0 +1,30 @@
+import numpy as np
+import scipy.special as spl
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+n = 3
+
+x = np.linspace(0,20,500)
+y = spl.jv(n,x)
+plt.plot(x, y, '-')
+plt.show()
+
+k = list(spl.jnp_zeros(n, 5))
+
+r = np.linspace(0,1,500)
+theta = np.linspace(0,2*np.pi,500)
+R, Theta = np.meshgrid(r, theta)
+V = spl.jv(n,k[2]*R)*np.cos(n*Theta)
+
+fig = plt.figure()
+
+ax = fig.add_subplot(111, projection='3d')
+
+X, Y = R*np.cos(Theta), R*np.sin(Theta)
+
+ax.plot_surface(X, Y, V, cmap=plt.cm.YlGnBu_r)
+
+ax.set_zlim(-1, 1)
+
+plt.show()
