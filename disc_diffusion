@@ -1,0 +1,38 @@
+import scipy.special as spl
+import numpy as np
+
+a, n = 2, 0
+c0 = a**2-r**2
+
+z = list(spl.jnp_zeros(n, 32))
+
+C = []
+for i in range(0,len(z)):
+    C.append(1/(a*np.sqrt(np.pi)*spl.jv(n,z[i])))
+
+
+a0 = []
+for j in range(0,len(z)):
+    a0.append(4*np.pi*a**4*C[j]*spl.jv(2,z[j])/z[j]**2)
+
+N = 15
+
+r = np.linspace(0,a,500)
+theta = np.linspace(0,2*np.pi,500)
+R, Theta = np.meshgrid(r, theta)
+
+c = 0
+for m in range(1,N+1):
+    c += a0[m]*C[m]*spl.jv(n,z[m]*R/a)*np.cos(n*Theta)*np.exp(-z[m]**2)
+
+fig = plt.figure()
+
+ax = fig.add_subplot(111, projection='3d')
+
+X, Y = R*np.cos(Theta), R*np.sin(Theta)
+
+ax.plot_surface(X, Y, c, cmap=plt.cm.YlGnBu_r)
+
+ax.set_zlim(0, 0)
+
+plt.show()
